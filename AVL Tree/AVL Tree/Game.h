@@ -4,46 +4,47 @@
 #include "doublyLinkedList.h"
 #include "WordLadder.h"
 #include "WordLadderState.h"
-#include <Vector>
+#include <vector>
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <time.h>
+#include <ctime>
 #include <string>
 #include <sstream>
+#include "AVLTree.h"
 
 using namespace std;
 
 class Game {
 public:
 	//initialize the dictionary from the given file
-	Game(string inDictionary);
+	explicit Game(string inDictionary);
 	~Game();
 	//print first 10 words in dictionary
-	void listWords();
-	void play(string start, string end);
-	void play(string start);
-	void displayOneAwayWords(string word);
+	void ListWords();
+	void Play(string start, string end);
+	void Play(const string& start);
+	void DisplayOneAwayWords(string word);
 
-	bool printToCMD = false;
+	bool printToCmd = false;
 	bool printToFile = false;
 
 private:
 	doublyLinkedList partialSolution;
-	AvlTree<WordLadderState> AvlPartialSolution;
-	vector<wordUse> bigDictionary;
+	AvlTree<WordLadderState> avlPartialSolution;
+	vector<WordUse> bigDictionary;
 	WordLadder ladder;
 	WordLadderState myState;
-	vector<wordUse> subDictionary;
-	bool bruteDone;
-	bool avlDone;
+	vector<WordUse> subDictionary;
+	bool bruteDone{};
+	bool avlDone{};
 	string targetWord;
 	ofstream fout;
 	WordLadder oneAwayList;
-	bool subDictionaryExists;
+	bool subDictionaryExists{};
 	stringstream ss;
-	int bruteDeque, bruteEnque;
-	int AStarDeque, AStarEnque;
+	int bruteDeque{}, bruteEnque{};
+	int aStarDeque{}, aStarEnque{};
 
 
 	void createSubDictionary(int wordLen);
@@ -51,10 +52,10 @@ private:
 	bool findWord(string word, bool isAvl);
 	WordLadder copyLadder();
 	void printLadder();
-	void displayPartialList() { partialSolution.printList(); }
+	void displayPartialList() { partialSolution.PrintList(); }
 	void reset();
 	void print();
-	int expectedWork(WordLadderState ladder, string endWord);
+	int expectedWork(WordLadderState curr, string endWord);
 	
 
 };

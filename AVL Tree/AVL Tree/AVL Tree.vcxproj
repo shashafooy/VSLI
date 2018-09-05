@@ -115,6 +115,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AVLProgram.h" />
+    <ClInclude Include="AVLTree.h" />
+    <ClInclude Include="doublyLinkedList.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="WordLadder.h" />
+    <ClInclude Include="WordLadderState.h" />
+    <ClInclude Include="wordUse.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="dictionary.txt" />
+    <Text Include="output.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="doublyLinkedList.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="TestLadder.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

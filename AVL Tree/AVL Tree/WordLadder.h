@@ -6,20 +6,24 @@
 
 using namespace std;
 
-class WordLadder : public vector<string> {
+class WordLadder : public vector<string>
+{
 public:
-	friend ostream& operator<<(ostream& ss, WordLadder& gs) {
-		ss << gs.toString();
+	friend ostream& operator<<(ostream& ss, WordLadder& gs)
+	{
+		ss << gs.ToString();
 		return ss;
 	}
-	string toString() {
+	string ToString()
+	{
 		ostringstream oss;
 		oss << "[";
-		for (int i = 0; i < size(); i++) {
+		for (auto i = 0; i < size(); i++)
+		{
 			if (i != 0) oss << ", ";
 			oss << at(i);
 		}
-		oss<<"]";
+		oss << "]";
 		return oss.str();
 	}
 private:

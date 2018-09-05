@@ -1,17 +1,18 @@
 #include "Game.h"
 
 
-Game::Game(string inDictionary)
+Game::Game(const string inDictionary)
 {
 	ifstream file(inDictionary);
 	string tword;
-	while (file >> tword) {
-		wordUse temp(tword);
+	while (file >> tword)
+	{
+		WordUse temp(tword);
 		bigDictionary.push_back(temp);
 	}
 	file.close();
-	srand(time(NULL));
-	
+	srand(time(nullptr));
+
 	fout.open("output.txt");
 	reset();
 
@@ -22,38 +23,40 @@ Game::~Game()
 	fout.close();
 }
 
-void Game::listWords()
+void Game::ListWords()
 {
-	for (int i = 0; i < 10; i++) {
+	for (auto i = 0; i < 10; i++)
+	{
 		ss << bigDictionary[i].word << endl;
 	}
 	ss << endl;
 	ss << "\n*******************\n\n";
 	print();
 }
-
-void Game::play(string start, string end)
+void Game::Play(string start, string end)
 {
 	ss << "From " << start << " to " << end << endl << endl;
-	if (start.length() != end.length()) {
+	if (start.length() != end.length())
+	{
 		//endgame
 		ss << "Words are of different lengths\n\n";
 		reset();
 		return;
 	}
-	if (!subDictionaryExists) 
+	if (!subDictionaryExists)
 		createSubDictionary(start.length());
-	if (!findWord(start,false) || !findWord(end,false)) {
+	if (!findWord(start, false) || !findWord(end, false))
+	{
 		//endgame
 		ss << "Input(s) are not valid words\n\n";
 		reset();
 		return;
 	}
 
-	
+
 	print();
 	targetWord = end;
-	
+
 	ladder.push_back(start);
 	partialSolution.insertBack(ladder);
 	bruteEnque++;
@@ -62,37 +65,45 @@ void Game::play(string start, string end)
 	AvlPartialSolution.insert(myState);
 	AStarEnque++;
 
-	while (true) {
+	while (true)
+	{
 		if (bruteDone&&avlDone) break;
-		if (partialSolution.isEmpty() || AvlPartialSolution.isEmpty()) {
+		if (partialSolution.isEmpty() || AvlPartialSolution.isEmpty())
+		{
 			bruteDone = false;
 			break;
 		}
-			
-		if (!bruteDone) {
+
+		if (!bruteDone)
+		{
 			ladder = partialSolution.getFront();
 			partialSolution.deleteFront();
 			bruteDeque++;
 		}
-		if (!avlDone) {
+		if (!avlDone)
+		{
 			myState = AvlPartialSolution.removeMin();
 			AStarDeque++;
 		}
-		if (ladder[ladder.size() - 1] == targetWord) {	bruteDone = true;	}
-		if (myState.lastWord() == targetWord) {	avlDone = true;	}
+		if (ladder[ladder.size() - 1] == targetWord) { bruteDone = true; }
+		if (myState.lastWord() == targetWord) { avlDone = true; }
 
-		if (!bruteDone) {
+		if (!bruteDone)
+		{
 			createOneAwayList(ladder[ladder.size() - 1], false);
-			for (int i = 0; i < oneAwayList.size(); i++) {
+			for (int i = 0; i < oneAwayList.size(); i++)
+			{
 				WordLadder newLadder = copyLadder();
 				newLadder.push_back(oneAwayList[i]);
 				partialSolution.insertBack(newLadder);
 				bruteEnque++;
 			}
 		}
-		if (!avlDone) {
+		if (!avlDone)
+		{
 			createOneAwayList(myState.lastWord(), true);
-			for (int i = 0; i < oneAwayList.size(); i++) {
+			for (int i = 0; i < oneAwayList.size(); i++)
+			{
 
 				WordLadderState newState = myState;
 				newState.wordLadder.push_back(oneAwayList[i]);
@@ -102,39 +113,46 @@ void Game::play(string start, string end)
 			}
 		}
 	}
-	if (bruteDone && avlDone) {
+	if (bruteDone && avlDone)
+	{
 		//endgame win
-		ss << "Congradulations\n";
+		ss << "Congratulations\n";
 		printLadder();
 		ss << " " << ladder.size() << " BRUTE dequeued: " << bruteDeque << " enqueued: " << bruteEnque << endl;
 		ss << myState.wordLadder;
 		ss << " " << myState.wordLadder.size() << " AVL dequeued: " << AStarDeque << " enqueued: " << AStarEnque << endl;
 		reset();
 	}
-	else {
+	else
+	{
 		//endgame lose
 		ss << "Could not find ladder for " << ladder[0];
 		reset();
 	}
 	print();
 }
+
 //select random word of same length
-void Game::play(string start)
+void Game::Play(const string& start)
 {
 	if (!subDictionaryExists) createSubDictionary(start.length());
 	string end;
-	do {
+	do
+	{
 		end = subDictionary[rand() % subDictionary.size()].word;
 	} while (end == start);
 
-	play(start, end);
+	Play(start, end);
 }
 
-void Game::createSubDictionary(int wordLen)
+void Game::createSubDictionary(const int wordLen)
 {
-	for (int i = 0; i < bigDictionary.size(); i++) {
-		if (bigDictionary[i].word.length() == wordLen) {
-			subDictionary.push_back(bigDictionary[i]);
+	for (auto& i : bigDictionary)
+	{
+		if (wordLen == i.word.length())
+		{
+			subDictionary.push_back(i);
+
 		}
 	}
 	subDictionaryExists = true;
@@ -143,8 +161,10 @@ void Game::createOneAwayList(string word, bool isAvl)
 {
 	oneAwayList.clear();
 
-	for (int j = 0; j < word.length(); j++) {
-		for (int i = 'a'; i < 'a' + 26; i++) {
+	for (int j = 0; j < word.length(); j++)
+	{
+		for (int i = 'a'; i < 'a' + 26; i++)
+		{
 			string tempWord = word;
 			tempWord[j] = i;
 			if (tempWord == word || !findWord(tempWord, isAvl)) continue;
@@ -157,17 +177,22 @@ bool Game::findWord(string word, bool isAvl)
 {
 	int first, last, mid;
 	first = 0;
-	last = subDictionary.size()-1;
+	last = subDictionary.size() - 1;
 	mid = (first + last) / 2;
-	while (first <= last) {
-		if (subDictionary[mid].word == word) {
-			if (!isAvl) {
-				if (subDictionary[mid].used == true && subDictionary[mid].word != targetWord) {
+	while (first <= last)
+	{
+		if (subDictionary[mid].word == word)
+		{
+			if (!isAvl)
+			{
+				if (subDictionary[mid].used == true && subDictionary[mid].word != targetWord)
+				{
 					return false;
 				}
 				subDictionary[mid].used = true;
 			}
-			else {
+			else
+			{
 				if (subDictionary[mid].levelUsed > myState.wordLadder.size())
 					subDictionary[mid].levelUsed = myState.wordLadder.size();
 				else
@@ -175,11 +200,13 @@ bool Game::findWord(string word, bool isAvl)
 			}
 			return true;
 		}
-		if (subDictionary[mid].word.compare(word)>0) {
+		if (subDictionary[mid].word.compare(word) > 0)
+		{
 			//mid word is larger(later in dictionary) than target
 			last = mid - 1;
 		}
-		else {
+		else
+		{
 			//mid word is less(earlier in dictionary) than target
 			first = mid + 1;
 		}
@@ -195,12 +222,13 @@ WordLadder Game::copyLadder()
 
 void Game::printLadder()
 {
-/*	for (int i = 0; i < ladder.size(); i++) {
-		ss << ladder[i] << endl;
-	}
-*/
+	/*	for (int i = 0; i < ladder.size(); i++) {
+			ss << ladder[i] << endl;
+		}
+	*/
 	ss << "[";
-	for (int i = 0; i < ladder.size(); i++) {
+	for (int i = 0; i < ladder.size(); i++)
+	{
 		if (i != 0) ss << ", ";
 		ss << ladder[i];
 	}
@@ -217,11 +245,11 @@ void Game::reset()
 	avlDone = false;
 	targetWord.clear();
 	partialSolution.clear();
-	AvlPartialSolution.makeEmpty();
+	avlPartialSolution.MakeEmpty();
 	bruteDeque = 0;
 	bruteEnque = 0;
-	AStarDeque = 0;
-	AStarEnque = 0;
+	aStarDeque = 0;
+	aStarEnque = 0;
 	ss << "\n*******************\n\n";
 
 	print();
@@ -230,7 +258,7 @@ void Game::reset()
 
 void Game::print()
 {
-	if (printToCMD) cout << ss.str();
+	if (printToCmd) cout << ss.str();
 	if (printToFile) fout << ss.str();
 	ss.str(string());
 }
@@ -240,25 +268,28 @@ int Game::expectedWork(WordLadderState curr, string endWord)
 {
 	int priority = curr.priority;
 	string recentWord = curr.wordLadder[curr.wordLadder.size() - 1];
-	for (int i = 0; i < recentWord.length(); i++) {
+	for (int i = 0; i < recentWord.length(); i++)
+	{
 		//run through each letter
 		//if the letter doesn't match end word letter, 
 		//priority++
-		if (recentWord[i] != endWord[i]) {
+		if (recentWord[i] != endWord[i])
+		{
 			priority += recentWord.length();
 		}
 	}
 	return priority;
 }
 
-void Game::displayOneAwayWords(string word)
-{ 
-	createOneAwayList(word,true);
+void Game::DisplayOneAwayWords(string word)
+{
+	createOneAwayList(word, true);
 
 	ss << "Ladder Level: " << ladder.size() << endl;
 	ss << "One away from " << word << endl;
 
-	for (int i = 0; i < oneAwayList.size(); i++) {
+	for (int i = 0; i < oneAwayList.size(); i++)
+	{
 		ss << oneAwayList[i] << " ";
 	}
 	ss << endl << endl;

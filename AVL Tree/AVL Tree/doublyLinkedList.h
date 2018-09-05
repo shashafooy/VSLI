@@ -1,7 +1,7 @@
 #ifndef LIST_H
 #define LIST_H
 #include <string>
-#include "wordUse.h"
+#include "WordUse.h"
 #include "WordLadder.h"
 #include <vector>
 #include <iostream>
@@ -28,9 +28,9 @@ public:
 	void insertBack(WordLadder data);
 	void deleteFront();
 	void deleteBack();
-	WordLadder getFront();
-	WordLadder getBack();
-	string printList();
+	WordLadder GetFront() const;
+	WordLadder GetBack() const;
+	string PrintList();
 	bool isEmpty();
 	void clear();
 private:

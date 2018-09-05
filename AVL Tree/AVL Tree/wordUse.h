@@ -4,9 +4,9 @@
 
 using namespace std;
 
-class wordUse {
+class WordUse {
 public:
-	wordUse(string tword, bool tused = false) {
+	explicit WordUse(const string& tword, bool tused = false) {
 		word = tword;
 		used = tused;
 		levelUsed = 1000000; //larger than dictionary

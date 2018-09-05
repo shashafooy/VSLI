@@ -55,19 +55,19 @@ void doublyLinkedList::deleteBack()
 }
 
 
-WordLadder doublyLinkedList::getFront()
+WordLadder doublyLinkedList::GetFront() const
 {
 	return head->data;
 }
 
 
-WordLadder doublyLinkedList::getBack()
+WordLadder doublyLinkedList::GetBack() const
 {
 	return tail->data;
 }
 
 
-string doublyLinkedList::printList()
+string doublyLinkedList::PrintList()
 {
 	Node* curHead = head;
 	if (!head) ss << "empty List" << endl;
@@ -87,13 +87,12 @@ string doublyLinkedList::printList()
 
 bool doublyLinkedList::isEmpty()
 {
-	if (!head) return true;
-	return false;
+	return head == nullptr;
 }
 
 void doublyLinkedList::clear()
 {
-	while (head != NULL) deleteFront();
+	while (head != nullptr) deleteFront();
 }
 
 
