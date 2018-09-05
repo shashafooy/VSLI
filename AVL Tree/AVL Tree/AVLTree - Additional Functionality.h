@@ -2,6 +2,7 @@
 #define AVL_TREE_H
 
 #include <algorithm>
+#include <iostream> 
 #include <cassert>
 #include <sstream>
 #include <utility>
@@ -18,7 +19,7 @@ public:
 	{
 		size = 0;
 		printOrder = preOrder;
-	}
+	} 
 
 	int GetSize() const { return size; }
 
@@ -53,22 +54,30 @@ public:
 		return IsEmpty() ? -1 : abs(root->left->height - root->right->height);
 	}
 
-
-
 	/**
-	 * \brief Searches for a value
-	 * \param x Value to find
-	 * \return true if x is found
+	 * \brief Find the smallest item in the tree. Throw UnderflowException if empty.
+	 * \return The minimum object in the tree
 	 */
+	const Comparable & FindMin() const
+	{
+		assert(!IsEmpty());
+		return FindMin(root)->element;
+	}
+
+	/* Find the largest item in the tree.	 */
+	const Comparable & FindMax() const
+	{
+		assert(!IsEmpty());
+		return FindMax(root)->element;
+	}
+
+	/* Returns true if x is found in the tree. */
 	bool Contains(const Comparable & x) const
 	{
 		return Contains(x, root);
 	}
 
-	/**
-	 * \brief Check if tree is empty
-	 * \return Boolean if the head is null
-	 */
+	/* Test if the tree is logically empty.	 */
 	bool IsEmpty() const
 	{
 		return root == nullptr;
@@ -91,7 +100,7 @@ public:
 	}
 
 	/**
-	 * \brief Make the tree empty.
+	 * \brief Make the tree logically empty.
 	 */
 	void MakeEmpty()
 	{
@@ -109,20 +118,33 @@ public:
 	}
 
 	/**
-	 * \brief Try to delete the given value
-	 * \param x Value to delete
+	 * Insert x into the tree;
+	 * && is termed an rvalue reference.
+	 * a good explanation is at http://thbecker.net/articles/rvalue_references/section_01.html
 	 */
+	void Insert(Comparable && x)
+	{
+		if (Contains(x)) return;
+
+		size++;
+		Insert(std::move(x), root);
+	}
+
+	/* Remove x from the tree. Nothing is done if x is not found.	 */
 	void Remove(const Comparable & x)
 	{
 		size--;
 		Remove(x, root);
 	}
+	/* remove smallest element from the tree.  Return the value found there*/
+	Comparable RemoveMin()
+	{
+		size--;
+		AvlNode * min = RemoveMin(root);
+		assert(min != NULL);
+		return min->element;
+	}
 
-	/**
-	 * \brief Searches for a given value
-	 * \param x Value to search for
-	 * \return the height of the node
-	 */
 	int GetNodeHeight(const int x)
 	{
 		return GetHeight(GetNode(x, root));
@@ -130,7 +152,7 @@ public:
 
 	enum PrintOrder
 	{
-		preOrder = 1, postOrder = 2, inOrder = 3
+		preOrder=1, postOrder=2, inOrder=3
 	};
 
 #pragma endregion
@@ -160,10 +182,12 @@ private:
 	PrintOrder printOrder;
 
 
+
 	/**
-	 * \brief Insert a value into the tree
-	 * \param  x Value to insert
-	 * \param  t Current head
+	 * Internal method to insert into a subtree.
+	 * x is the item to insert.
+	 * t is the node that roots the subtree.
+	 * Set the new root of the subtree.
 	 */
 	void Insert(const Comparable & x, AvlNode * & t)
 	{
@@ -177,11 +201,29 @@ private:
 		Balance(t);
 	}
 
+	/**
+	 * Internal method to insert into a subtree.
+	 * x is the item to insert.
+	 * t is the node that roots the subtree.
+	 * Set the new root of the subtree.
+	 */
+	void Insert(Comparable && x, AvlNode * & t)
+	{
+		if (t == nullptr)
+			t = new AvlNode { std::move(x), nullptr, nullptr };
+		else if (x < t->element)
+			Insert(std::move(x), t->left);
+		else
+			Insert(std::move(x), t->right);
+
+		Balance(t);
+	}
 
 	/**
-	 * \brief Delete value from tree.
-	 * \param x The item to remove.
-	 * \param t The node that roots the subtree.
+	 * Internal method to remove from a subtree.
+	 * x is the item to remove.
+	 * t is the node that roots the subtree.
+	 * Set the new root of the subtree.
 	 */
 	void Remove(const Comparable & x, AvlNode * & t)
 	{
@@ -207,8 +249,10 @@ private:
 		Balance(t);
 	}
 	/**
-	*\brief Find the minimum node
-	*\param t Head of subtree
+	*Internal method to find the minimum node
+	*store the node in a temp node
+	*delete the original node
+	*return temp node
 	*/
 	AvlNode*  RemoveMin(AvlNode * & t)
 	{
@@ -225,10 +269,7 @@ private:
 
 	static const int ALLOWED_IMBALANCE = 1;
 
-	/**
-	 * \brief Balance tree using right/left rotation. Performed after every Insert/Delete
-	 * \param t
-	 */
+	// Assume t is balanced or within one of being balanced
 	void Balance(AvlNode * & t)
 	{
 		if (t == nullptr)
@@ -257,9 +298,8 @@ private:
 	}
 
 	/**
-	 * \brief Find the smallest item in a subtree.
-	 * \param t Head of subtree
-	 * \return node containing the smallest item.
+	 * Internal method to find the smallest item in a subtree t.
+	 * Return node containing the smallest item.
 	 */
 	AvlNode * FindMin(AvlNode *t) const
 	{
@@ -271,9 +311,8 @@ private:
 	}
 
 	/**
-	 * \brief Find the largest item in a subtree.
-	 * \param t Head of subtree
-	 * \return node containing the largest item.
+	   Internal method to find the largest item in a subtree t.
+	   Return node containing the largest item.
 	 */
 	static AvlNode * FindMax(AvlNode *t)
 	{
@@ -287,7 +326,7 @@ private:
 	 * \brief Gets the desired AVL Node
 	 * \param x Value to search for
 	 * \param t Current head of the tree
-	 * \return
+	 * \return 
 	 */
 	AvlNode * GetNode(const Comparable & x, AvlNode *t) const
 	{
@@ -301,26 +340,24 @@ private:
 
 
 	/**
-	  \brief Check if an item is in a subtree.
-	  \param x Item to search for.
-	  \param t Head of subtree.
+	  Internal method to test if an item is in a subtree.
+	  x is item to search for.
+	  t is the node that roots the tree.
 	 */
 	bool Contains(const Comparable & x, AvlNode *t) const
 	{
 		if (t == nullptr)
 			return false;
-		if (x < t->element)
+		else if (x < t->element)
 			return Contains(x, t->left);
-		if (t->element < x)
+		else if (t->element < x)
 			return Contains(x, t->right);
-
-		return true;    // Match
+		else
+			return true;    // Match
 	}
 
-
 	/**
-	 * \brief Deletes the tree
-	 * \param t Head of subtree
+	  Internal method to make subtree empty.
 	 */
 	void MakeEmpty(AvlNode * & t)
 	{
@@ -334,10 +371,7 @@ private:
 	}
 
 	/**
-	 * \brief Makes a string of the tree in a "tree-like" display. Print order is set in a public method
-	 * \param t Head of subtree
-	 * \param spacer Space used to separate entries
-	 * \return String that holds the tree
+	  Internal method to create a string for a subtree rooted at t in sorted order.
 	 */
 	string ToString2(AvlNode *t, const string& spacer = "") const
 	{
@@ -365,10 +399,8 @@ private:
 	}
 
 	/**
-	 * \brief Makes a string of the tree inline. Print order is set in a public method
-	 * \param t Head of subtree
-	 * \return String that holds the tree
-	 */
+	*Internal method to create a string for a subtree as a list of elements
+	*/
 	string ToString(AvlNode *t) const
 	{
 		if (t == nullptr) return "";
@@ -396,11 +428,8 @@ private:
 
 	}
 
-	
 	/**
-	 * \brief Deep Copy to replicate tree
-	 * \param t Head of subtree
-	 * \return Head of new tree
+	 * Internal method to clone subtree.
 	 */
 	AvlNode * Clone(AvlNode *t) const
 	{
@@ -410,22 +439,23 @@ private:
 			return new AvlNode { t->element, Clone(t->left), Clone(t->right), t->height };
 	}
 #pragma region AVL Manipulations
-	
-	
 	/**
-	 * \brief  Gets the height of the node.
-	 * \param t Head of subtree
-	 * \return  Height of node t or -1 if nullptr.
+	 * Return the height of node t or -1 if nullptr.
 	 */
 	static int GetHeight(AvlNode *t)
 	{
 		return t == nullptr ? -1 : t->height;
 	}
 
+	static int Max(int lhs, int rhs)
+	{
+		return lhs > rhs ? lhs : rhs;
+	}
 
 	/**
-	  \brief Single Rotation left child.
-	  \param k2 Node to base rotation off of	
+	  Rotate binary tree node with left child.
+	  For AVL trees, this is a single rotation for case 1.
+	  Update heights, then set new root.
 	 */
 	void RotateWithLeftChild(AvlNode * & k2)
 	{
@@ -438,8 +468,9 @@ private:
 	}
 
 	/**
-	  \brief Single Rotation right child.
-	  \param k1 Node to base rotation off of
+	  Rotate binary tree node with right child.
+	  For AVL trees, this is a single rotation for case 4.
+	  Update heights, then set new root.
 	 */
 	void RotateWithRightChild(AvlNode * & k1)
 	{
@@ -452,8 +483,10 @@ private:
 	}
 
 	/**
-	 *\brief Double Rotation left child
-	 *\param k1 Node to base rotation off of
+	  Double rotate binary tree node: first left child.
+	  with its right child; then node k3 with new left child.
+	  For AVL trees, this is a double rotation for case 2.
+	  Update heights, then set new root.
 	 */
 	void DoubleWithLeftChild(AvlNode * & k3)
 	{
@@ -462,8 +495,10 @@ private:
 	}
 
 	/**
-	 *\brief Double Rotation right child
-	 *\param k1 Node to base rotation off of
+	  Double rotate binary tree node: first right child.
+	  with its left child; then node k1 with new right child.
+	  For AVL trees, this is a double rotation for case 3.
+	  Update heights, then set new root.
 	 */
 	void DoubleWithRightChild(AvlNode * & k1)
 	{

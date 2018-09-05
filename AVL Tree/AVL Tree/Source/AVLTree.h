@@ -2,6 +2,7 @@
 #define AVL_TREE_H
 
 #include <algorithm>
+#include <iostream> 
 #include <cassert>
 #include <sstream>
 #include <utility>

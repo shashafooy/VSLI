@@ -15,21 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="doublyLinkedList.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WordLadder.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WordLadderState.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="wordUse.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="AVLTree.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -38,9 +23,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="dictionary.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
     <Text Include="input.txt">
       <Filter>Resource Files</Filter>
     </Text>
@@ -49,15 +31,6 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="doublyLinkedList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TestLadder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
