@@ -1,6 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
-#include "avlTreeTemplate.h"
+#include "AVLTree.h"
 #include "doublyLinkedList.h"
 #include "WordLadder.h"
 #include "WordLadderState.h"
@@ -47,7 +47,7 @@ private:
 	int aStarDeque{}, aStarEnque{};
 
 
-	void createSubDictionary(int wordLen);
+	void createSubDictionary(unsigned wordLen);
 	void createOneAwayList(string word, bool isAvl);
 	bool findWord(string word, bool isAvl);
 	WordLadder copyLadder();

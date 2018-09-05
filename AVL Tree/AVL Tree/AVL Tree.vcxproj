@@ -125,11 +125,13 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="dictionary.txt" />
-    <Text Include="output.txt" />
+    <Text Include="input.txt" />
+    <Text Include="pettit-A02107849.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="doublyLinkedList.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="TestLadder.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

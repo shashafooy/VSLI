@@ -10,33 +10,35 @@
 
 class AVLProgram    // NOLINT
 {
+public:
 	AVLProgram()
 	{
 		fout.open("pettit-A02107849.txt");
 		tree = new AvlTree<int>();
+		stop = false;
 	}
 	~AVLProgram()
 	{
 		fout.close();
 		DeleteTree();
 	}
-public:
+
 
 
 
 	void Run()
 	{
 		PrintOptions();
-		while (true)
+		while (!stop)
 		{
 
 			GetCommand();
 			if (!ValidateCommand())
 			{
-				Print("Invalid input\n");
+				Print("Invalid input");
 				continue;
 			}
-			RunCommand(command, arg);
+			RunCommand();
 
 		}
 
@@ -47,8 +49,11 @@ private:
 	string userInput;
 	string command;
 	string arg;
+	bool stop;
 	ofstream fout;
 	AvlTree<int>* tree;
+
+#pragma region Run Logic
 
 
 	/**
@@ -67,6 +72,7 @@ private:
 		if (command == "Traversal") return true;
 		if (command == "Delete_Tree") return true;
 		if (command == "Check_Balance") return true;
+		if (command == "Exit") return true;
 
 		if (command == "Pre_order" && !*p && !arg.empty()) return true;
 		if (command == "Post_order" && !*p && !arg.empty()) return true;
@@ -81,7 +87,7 @@ private:
 	 */
 	void GetCommand()
 	{
-		Print(">");
+		Print("\n>");
 		getline(cin, userInput);
 		istringstream iss(userInput);
 		iss >> command >> arg;
@@ -89,18 +95,17 @@ private:
 
 	/**
 	 * \brief Executes the command
-	 * \param cmd Given Command
-	 * \param arg Given Argument
 	 */
-	void RunCommand(const string& cmd, const string& arg)
+	void RunCommand()
 	{
-		if (cmd == "Create_Tree") CreateTree(arg);
-		else if (cmd == "Insertion") Insert(stoi(arg));
-		else if (cmd == "Deletion") Delete(stoi(arg));
-		else if (cmd == "Search") Search(stoi(arg));
-		else if (cmd == "Traversal") Traversal();
-		else if (cmd == "Delete_Tree") DeleteTree();
-		else if (cmd == "Check_Balance") CheckBalance();
+		if (command == "Create_Tree") CreateTree(arg);
+		else if (command == "Insertion") Insert(stoi(arg));
+		else if (command == "Deletion") Delete(stoi(arg));
+		else if (command == "Search") Search(stoi(arg));
+		else if (command == "Traversal") Traversal();
+		else if (command == "Delete_Tree") DeleteTree();
+		else if (command == "Check_Balance") CheckBalance();
+		else if (command == "Exit") stop = true;
 	}
 
 	/**
@@ -108,21 +113,22 @@ private:
 	 */
 	void PrintOptions()
 	{
-		string a = "Choose the option to be performed:\nCreate_Tree\n";
+		string a = "Choose the option to be performed:\n";
 		a.append("Create_Tree\n")
 			.append("Insertion\n")
 			.append("Deletion\n")
 			.append("Search\n")
 			.append("Traversal\n")
 			.append("Delete_Tree\n")
-			.append("Check_Balance");
+			.append("Check_Balance\n")
+			.append("Exit");
 		PrintLine(a);
 	}
 
 	/**
-	 * \brief Prints the given string to a file and command window
-	 * \param str Given value to print
-	 */
+	* \brief Prints the given string to a file and command window
+	* \param str Given value to print
+	*/
 	void Print(const string& str)
 	{
 		fout << str;
@@ -138,8 +144,30 @@ private:
 		fout << str << endl;
 		cout << str << endl;
 	}
+#pragma endregion
 
-	void CreateTree(const string& file);
+
+#pragma region Commands
+
+
+	/**
+	 * \brief Reads values from a .txt file, creates the tree, and prints it
+	 * \param file .txt file to be read from
+	 */
+	void CreateTree(const string& file)
+	{
+		ifstream fin(file);
+		string item;
+		tree->MakeEmpty();
+		while(!fin.eof())
+		{
+			getline(fin, item);
+			if (item.empty()) break;
+			auto value = stoi(item);
+			tree->Insert(value);
+		}
+		Print(tree->ToString());
+	}
 
 	/**
 	 * \brief Inserts the given int into the tree and prints out the tree.
@@ -150,12 +178,18 @@ private:
 		tree->Insert(value);
 		Print(tree->ToString());
 	}
+
 	/**
 	 * \brief Deletes the given int from the tree and prints out the tree.
 	 * \param value int to be deleted from the tree
 	 */
 	void Delete(int value)
 	{
+		if (!tree->Contains(value))
+		{
+			Print("Node not found.");
+			return;
+		}
 		tree->Remove(value);
 		Print(tree->ToString());
 	}
@@ -164,10 +198,10 @@ private:
 	 * \brief Prints out the height of the given value
 	 * \param value value to search for
 	 */
-	void Search(const int value) const
+	void Search(const int value)
 	{
-		tree->Contains(value);
-		//todo: Print the node's height
+		const auto height = tree->GetNodeHeight(value);
+		height == -1 ? Print("Node not found in tree") : Print(std::to_string(height));
 	}
 
 
@@ -176,23 +210,27 @@ private:
 	 */
 	void Traversal()
 	{
-		Print("Select Traversal type (input as int)\n1.Pre_order\n2.Post_order\n3.In_order\n");
+		Print("Select Traversal type (input as int)\n[1]Pre_order\n[2]Post_order\n[3]In_order\n");
 		GetCommand();
 		// ReSharper disable once CppExpressionWithoutSideEffects
-		switch(stoi(command))
+		switch (stoi(command))
 		{
 		case 1:
-			//todo: PreOrder
+			Print(tree->ToString(tree->preOrder));
 			break;
 		case 2:
-			//todo: PostOrder
+			Print(tree->ToString(tree->postOrder));
 			break;
 		case 3:
-			//todo: InOrder
+			Print(tree->ToString(tree->inOrder));
 			break;
+		default:
+			Print("Invalid Traversal Input");
+			Traversal();
 		}
 
 	}
+
 	/**
 	 * \brief Deletes the tree
 	 */
@@ -201,15 +239,17 @@ private:
 		tree->MakeEmpty();
 		Print("Tree Deleted");
 	}
+
 	/**
 	 * \brief Prints out the current balance of the tree
 	 */
 	void CheckBalance()
 	{
-		//todo: give AVLTree a balance variable/function
-		Print(tree->GetBalance());
+		Print(std::to_string(tree->GetBalance()));
 	}
-	
+#pragma endregion
+
+
 
 };
 

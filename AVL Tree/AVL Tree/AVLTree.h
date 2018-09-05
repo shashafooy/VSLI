@@ -5,6 +5,7 @@
 #include <iostream> 
 #include <cassert>
 #include <sstream>
+#include <utility>
 using namespace std;
 
 
@@ -51,6 +52,11 @@ public:
 		return *this;
 	}
 
+	int GetBalance()
+	{
+		return IsEmpty() ? -1 : abs(root->left->height - root->right->height);
+	}
+
 	/**
 	 * \brief Find the smallest item in the tree. Throw UnderflowException if empty.
 	 * \return The minimum object in the tree
@@ -80,28 +86,36 @@ public:
 		return root == nullptr;
 	}
 
-	/* String contains the tree contents in sorted order. */
-	string ToString(const string& msg = "") const
+	/**
+	 * \brief Gives a string of the tree inline
+	 * \param traversalType 1: PreOrder	 2: PostOrder  3: InOrder
+	 * \return The tree in a string
+	 */
+	string ToString(int traversalType = 1)
 	{
+		printOrder = static_cast<PrintOrder>(traversalType);
 		ostringstream oss;
-		oss << msg << endl;
 		if (IsEmpty())
 			oss << "Empty tree" << endl;
 		else
 			oss << ToString(root);
-		oss << "END " << msg << endl;
 		return oss.str();
 	}
 
-	/* Make the tree logically empty. */
+	/**
+	 * \brief Make the tree logically empty.
+	 */
 	void MakeEmpty()
 	{
 		MakeEmpty(root);
 	}
 
-	/*	Insert x into the tree; 	 */
+	/**
+	 *	\brief Insert x into the tree;
+	 */
 	void Insert(const Comparable & x)
 	{
+		if (Contains(x)) return;
 		size++;
 		Insert(x, root);
 	}
@@ -113,6 +127,8 @@ public:
 	 */
 	void Insert(Comparable && x)
 	{
+		if (Contains(x)) return;
+
 		size++;
 		Insert(std::move(x), root);
 	}
@@ -131,12 +147,25 @@ public:
 		assert(min != NULL);
 		return min->element;
 	}
+
+	int GetNodeHeight(const int x)
+	{
+		return GetHeight(GetNode(x, root));
+	}
+
+	enum PrintOrder
+	{
+		preOrder=1, postOrder=2, inOrder=3
+	};
+
 #pragma endregion
 
 #pragma region Private
 
 
 private:
+
+
 	struct AvlNode
 	{
 		Comparable element;
@@ -144,15 +173,17 @@ private:
 		AvlNode   *right;
 		int       height;
 
-		AvlNode(const Comparable & ele, AvlNode *lt, AvlNode *rt, int h = 0)
-			: element { ele }, left { lt }, right { rt }, height { h } { }
+		AvlNode(Comparable ele, AvlNode *lt, AvlNode *rt, const int h = 0)
+			: element { std::move(ele) }, left { lt }, right { rt }, height { h } { }
 
-		AvlNode(Comparable && ele, AvlNode *lt, AvlNode *rt, int h = 0)
+		AvlNode(Comparable && ele, AvlNode *lt, AvlNode *rt, const int h = 0)
 			: element { std::move(ele) }, left { lt }, right { rt }, height { h } { }
 	};
 
 	AvlNode *root;
 	int size;
+	PrintOrder printOrder;
+
 
 
 	/**
@@ -266,7 +297,7 @@ private:
 			}
 
 		t->height = max(GetHeight(t->left), GetHeight(t->right)) + 1;
-		
+
 	}
 
 	/**
@@ -291,6 +322,22 @@ private:
 		if (t != nullptr)
 			while (t->right != nullptr)
 				t = t->right;
+		return t;
+	}
+
+	/**
+	 * \brief Gets the desired AVL Node
+	 * \param x Value to search for
+	 * \param t Current head of the tree
+	 * \return 
+	 */
+	AvlNode * GetNode(const Comparable & x, AvlNode *t) const
+	{
+		if (t == nullptr) return t;
+		if (x < t->element)
+			return GetNode(x, t->left);
+		if (x > t->element)
+			return GetNode(x, t->right);
 		return t;
 	}
 
@@ -329,28 +376,57 @@ private:
 	/**
 	  Internal method to create a string for a subtree rooted at t in sorted order.
 	 */
-	string ToString(AvlNode *t, const string& spacer = "") const
+	string ToString2(AvlNode *t, const string& spacer = "") const
 	{
 		if (t == nullptr) return "";
 		ostringstream oss;
-
-		oss << ToString(t->right, spacer + "\t");
-		oss << spacer << t->element << endl;
-		oss << ToString(t->left, spacer + "\t");
+		switch (printOrder)
+		{
+		case preOrder:
+			oss << spacer << t->element << endl;
+			oss << ToString2(t->left, spacer + "\t");
+			oss << ToString2(t->right, spacer + "\t");
+			break;
+		case inOrder:
+			oss << ToString2(t->left, spacer + "\t");
+			oss << spacer << t->element << endl;
+			oss << ToString2(t->right, spacer + "\t");
+			break;
+		case postOrder:
+			oss << ToString2(t->left, spacer + "\t");
+			oss << ToString2(t->right, spacer + "\t");
+			oss << spacer << t->element << endl;
+			break;
+		}
 		return oss.str();
 	}
 
 	/**
 	*Internal method to create a string for a subtree as a list of elements
 	*/
-	string ToString2(AvlNode *t) const
+	string ToString(AvlNode *t) const
 	{
 		if (t == nullptr) return "";
 		ostringstream oss;
 
-		oss << ToString2(t->left);
-		oss << " " << t->element << " ";
-		oss << ToString2(t->right);
+		switch (printOrder)
+		{
+		case preOrder:
+			oss << " " << t->element << " ";
+			oss << ToString(t->left);
+			oss << ToString(t->right);
+			break;
+		case inOrder:
+			oss << ToString(t->left);
+			oss << " " << t->element << " ";
+			oss << ToString(t->right);
+			break;
+		case postOrder:
+			oss << ToString(t->left);
+			oss << ToString(t->right);
+			oss << " " << t->element << " ";
+			break;
+		}
 		return oss.str();
 
 	}
@@ -365,7 +441,7 @@ private:
 		else
 			return new AvlNode { t->element, Clone(t->left), Clone(t->right), t->height };
 	}
-	// Avl manipulations
+#pragma region AVL Manipulations
 	/**
 	 * Return the height of node t or -1 if nullptr.
 	 */
@@ -432,6 +508,8 @@ private:
 		RotateWithLeftChild(k1->right);
 		RotateWithRightChild(k1);
 	}
+#pragma endregion
+
 #pragma endregion
 
 };

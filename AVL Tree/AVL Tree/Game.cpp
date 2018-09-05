@@ -62,13 +62,13 @@ void Game::Play(string start, string end)
 	bruteEnque++;
 	myState.wordLadder = ladder;
 	myState.priority = expectedWork(ladder, ladder[ladder.size() - 1]);
-	AvlPartialSolution.insert(myState);
-	AStarEnque++;
+	avlPartialSolution.Insert(myState);
+	aStarEnque++;
 
 	while (true)
 	{
 		if (bruteDone&&avlDone) break;
-		if (partialSolution.isEmpty() || AvlPartialSolution.isEmpty())
+		if (partialSolution.isEmpty() || avlPartialSolution.IsEmpty())
 		{
 			bruteDone = false;
 			break;
@@ -76,14 +76,14 @@ void Game::Play(string start, string end)
 
 		if (!bruteDone)
 		{
-			ladder = partialSolution.getFront();
+			ladder = partialSolution.GetFront();
 			partialSolution.deleteFront();
 			bruteDeque++;
 		}
 		if (!avlDone)
 		{
-			myState = AvlPartialSolution.removeMin();
-			AStarDeque++;
+			myState = avlPartialSolution.RemoveMin();
+			aStarDeque++;
 		}
 		if (ladder[ladder.size() - 1] == targetWord) { bruteDone = true; }
 		if (myState.lastWord() == targetWord) { avlDone = true; }
@@ -91,7 +91,7 @@ void Game::Play(string start, string end)
 		if (!bruteDone)
 		{
 			createOneAwayList(ladder[ladder.size() - 1], false);
-			for (int i = 0; i < oneAwayList.size(); i++)
+			for (unsigned i = 0; i < oneAwayList.size(); i++)
 			{
 				WordLadder newLadder = copyLadder();
 				newLadder.push_back(oneAwayList[i]);
@@ -102,14 +102,14 @@ void Game::Play(string start, string end)
 		if (!avlDone)
 		{
 			createOneAwayList(myState.lastWord(), true);
-			for (int i = 0; i < oneAwayList.size(); i++)
+			for (unsigned i = 0; i < oneAwayList.size(); i++)
 			{
 
 				WordLadderState newState = myState;
 				newState.wordLadder.push_back(oneAwayList[i]);
 				newState.priority = expectedWork(newState, targetWord);
-				AvlPartialSolution.insert(newState);
-				AStarEnque++;
+				avlPartialSolution.Insert(newState);
+				aStarEnque++;
 			}
 		}
 	}
@@ -120,7 +120,7 @@ void Game::Play(string start, string end)
 		printLadder();
 		ss << " " << ladder.size() << " BRUTE dequeued: " << bruteDeque << " enqueued: " << bruteEnque << endl;
 		ss << myState.wordLadder;
-		ss << " " << myState.wordLadder.size() << " AVL dequeued: " << AStarDeque << " enqueued: " << AStarEnque << endl;
+		ss << " " << myState.wordLadder.size() << " AVL dequeued: " << aStarDeque << " enqueued: " << aStarEnque << endl;
 		reset();
 	}
 	else
@@ -145,7 +145,7 @@ void Game::Play(const string& start)
 	Play(start, end);
 }
 
-void Game::createSubDictionary(const int wordLen)
+void Game::createSubDictionary(const unsigned wordLen)
 {
 	for (auto& i : bigDictionary)
 	{

@@ -38,10 +38,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="output.txt">
+    <Text Include="dictionary.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="dictionary.txt">
+    <Text Include="input.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="pettit-A02107849.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
@@ -53,6 +56,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TestLadder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
