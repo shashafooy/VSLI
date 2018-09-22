@@ -1,0 +1,48 @@
+From kiss to woof
+
+Congradulations
+[kiss, miss, moss, moos, woos, woof] 6 BRUTE dequeued: 2172 enqueued: 3068
+[kiss, wiss, wigs, wogs, woos, woof] 6 AVL dequeued: 254 enqueued: 1067
+
+*******************
+
+From cock to numb
+
+Congradulations
+[cock, dock, duck, duce, dure, dura, duma, dumb, numb] 9 BRUTE dequeued: 3627 enqueued: 3715
+[cock, pock, puck, punk, puna, puma, duma, dumb, numb] 9 AVL dequeued: 1898 enqueued: 3038
+
+*******************
+
+From jura to such
+
+Congradulations
+[jura, mura, murk, muck, suck, such] 6 BRUTE dequeued: 1874 enqueued: 2876
+[jura, mura, murk, muck, suck, such] 6 AVL dequeued: 174 enqueued: 736
+
+*******************
+
+From stet to whey
+
+Congradulations
+[stet, stew, shew, whew, whey] 5 BRUTE dequeued: 647 enqueued: 1670
+[stet, stew, shew, whew, whey] 5 AVL dequeued: 24 enqueued: 112
+
+*******************
+
+From flute to taper
+
+Congradulations
+[flute, flite, flits, flies, plies, plier, plyer, payer, paper, taper] 10 BRUTE dequeued: 4890 enqueued: 6073
+[flute, flite, flits, flies, flier, plier, plyer, payer, paper, taper] 10 AVL dequeued: 481 enqueued: 1184
+
+*******************
+
+From stone to prove
+
+Congradulations
+[stone, shone, phone, prone, prove] 5 BRUTE dequeued: 226 enqueued: 553
+[stone, shone, phone, prone, prove] 5 AVL dequeued: 31 enqueued: 115
+
+*******************
+
