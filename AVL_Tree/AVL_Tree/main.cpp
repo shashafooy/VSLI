@@ -6,6 +6,8 @@ int main()
 
 	program->Run();
 
+	delete program;
+
 	return 0;
 
 }

@@ -8,6 +8,4 @@ Delete_Tree
 Check_Balance
 Exit
 
->Invalid input
->Invalid input
 >

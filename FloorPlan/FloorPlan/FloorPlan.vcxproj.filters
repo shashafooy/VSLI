@@ -13,35 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="VisualGDB settings">
-      <UniqueIdentifier>{eca9fb98-b8a9-45d8-94f2-645d768f8729}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="input.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="pettit-A02107849.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <None Include="AVL_Tree-Linux.vgdbsettings">
-      <Filter>VisualGDB settings</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="AVLProgram.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AVLTree - Additional Functionality.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AVLTree.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FloorPlan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AVLTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
