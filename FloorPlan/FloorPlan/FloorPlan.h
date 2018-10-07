@@ -14,7 +14,7 @@ using namespace std;
 class FloorPlan
 {
 public:
-	FloorPlan(const string& inFile)
+	explicit FloorPlan(const string& inFile)
 	{
 		in.open(inFile);
 		if (!in.is_open())
@@ -25,17 +25,18 @@ public:
 		ParseHeader();
 	}
 
-	double Cost(string NPE)
+	// ReSharper disable once CppInconsistentNaming
+	double Cost(const string NPE)
 	{
 		GenerateTree(NPE);
-
 
 		return tree.GetHeadCost();
 	}
 
-	string GetNPE()
+	// ReSharper disable once CppInconsistentNaming
+	string GetNPE() const
 	{
-
+		return tree.ToString();
 	}
 
 
@@ -49,7 +50,6 @@ private:
 	void ParseHeader()
 	{
 		string line;
-		Node *buffer;
 		string s1, s2, s3;
 
 		while (getline(in, line))
@@ -63,10 +63,10 @@ private:
 	void GenerateTree(string NPE)
 	{
 		tree.MakeEmpty();
-		auto temp = new Node();
+		Node* temp;
 		for(int i = NPE.length()-1; i>=0; i--)
 		{
-			delete temp;
+			//delete temp;
 			const char value = NPE.at(i);
 			if (value == 'H' || value == 'V')
 				temp = new Node(value);
@@ -76,9 +76,16 @@ private:
 				{
 					return node->name == value;
 				});
-				temp = *it;
+				if(it!=items.end())
+					temp = *it;
+				else
+				{
+					printf("item %c not found in database", value);
+					exit(EXIT_FAILURE);
+				}
 			}
 			tree.Insert(*temp);
+			if (temp->name == 'V' || temp->name == 'H') delete temp;
 		}
 	}
 

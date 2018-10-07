@@ -52,7 +52,7 @@ public:
 	/**
 	 *	\brief Insert x into the tree;
 	 */
-	void Insert(const Node & x)
+	void Insert(const Node x)
 	{
 		size++;
 		Insert(x, root);
@@ -63,6 +63,7 @@ public:
 		// ReSharper disable once CppExpressionWithoutSideEffects
 		GetNodeDim(root);
 		root->element.area = -1;
+		//find smallest area of all possible dimensions
 		for (auto dim : root->element.dims)
 		{
 			if (root->element.area > dim.width*dim.height || root->element.area == -1)
@@ -162,7 +163,7 @@ private:
 	 * \param  t Current head
 	 * \return True if successfully inserted the Node
 	 */
-	bool Insert(const Node & x, AvlNode * & t) const
+	bool Insert(const Node x, AvlNode * & t) const
 	{
 		//TODO custom insert for NPE
 
@@ -185,13 +186,14 @@ private:
 	 * \brief Deletes the tree
 	 * \param t Head of subtree
 	 */
-	void MakeEmpty(AvlNode * & t) const
+	void MakeEmpty(AvlNode * & t)
 	{
 		if (t != nullptr)
 		{
 			MakeEmpty(t->left);
 			MakeEmpty(t->right);
 			delete t;
+			size--;
 		}
 		t = nullptr;
 	}
