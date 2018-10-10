@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2016
@@ -7,16 +6,31 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FloorPlan", "FloorPlan\Floo
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|VisualGDB = Debug|VisualGDB
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		NewLinuxConfiguration|VisualGDB = NewLinuxConfiguration|VisualGDB
+		NewLinuxConfiguration|x64 = NewLinuxConfiguration|x64
+		NewLinuxConfiguration|x86 = NewLinuxConfiguration|x86
+		Release|VisualGDB = Release|VisualGDB
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B38C999A-BD71-4B98-A9B0-8CA87D77B80A}.Debug|VisualGDB.ActiveCfg = Debug|VisualGDB
+		{B38C999A-BD71-4B98-A9B0-8CA87D77B80A}.Debug|VisualGDB.Build.0 = Debug|VisualGDB
 		{B38C999A-BD71-4B98-A9B0-8CA87D77B80A}.Debug|x64.ActiveCfg = Debug|x64
 		{B38C999A-BD71-4B98-A9B0-8CA87D77B80A}.Debug|x64.Build.0 = Debug|x64
 		{B38C999A-BD71-4B98-A9B0-8CA87D77B80A}.Debug|x86.ActiveCfg = Debug|Win32
 		{B38C999A-BD71-4B98-A9B0-8CA87D77B80A}.Debug|x86.Build.0 = Debug|Win32
+		{B38C999A-BD71-4B98-A9B0-8CA87D77B80A}.NewLinuxConfiguration|VisualGDB.ActiveCfg = NewLinuxConfiguration|VisualGDB
+		{B38C999A-BD71-4B98-A9B0-8CA87D77B80A}.NewLinuxConfiguration|VisualGDB.Build.0 = NewLinuxConfiguration|VisualGDB
+		{B38C999A-BD71-4B98-A9B0-8CA87D77B80A}.NewLinuxConfiguration|x64.ActiveCfg = NewLinuxConfiguration|x64
+		{B38C999A-BD71-4B98-A9B0-8CA87D77B80A}.NewLinuxConfiguration|x64.Build.0 = NewLinuxConfiguration|x64
+		{B38C999A-BD71-4B98-A9B0-8CA87D77B80A}.NewLinuxConfiguration|x86.ActiveCfg = NewLinuxConfiguration|Win32
+		{B38C999A-BD71-4B98-A9B0-8CA87D77B80A}.NewLinuxConfiguration|x86.Build.0 = NewLinuxConfiguration|Win32
+		{B38C999A-BD71-4B98-A9B0-8CA87D77B80A}.Release|VisualGDB.ActiveCfg = Release|VisualGDB
+		{B38C999A-BD71-4B98-A9B0-8CA87D77B80A}.Release|VisualGDB.Build.0 = Release|VisualGDB
 		{B38C999A-BD71-4B98-A9B0-8CA87D77B80A}.Release|x64.ActiveCfg = Release|x64
 		{B38C999A-BD71-4B98-A9B0-8CA87D77B80A}.Release|x64.Build.0 = Release|x64
 		{B38C999A-BD71-4B98-A9B0-8CA87D77B80A}.Release|x86.ActiveCfg = Release|Win32
