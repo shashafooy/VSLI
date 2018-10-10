@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <utility>
-#include "AVLTree.h"
+//#include "AVLTree.h"
 #include <fstream>
 #include <vector>
 #include "Tree.h"
@@ -14,6 +14,10 @@ using namespace std;
 class FloorPlan
 {
 public:
+	/**
+	 * \brief Opens and parses the contents of inFile
+	 * \param inFile .txt file to parse
+	 */
 	explicit FloorPlan(const string& inFile)
 	{
 		in.open(inFile);
@@ -26,6 +30,11 @@ public:
 	}
 
 	// ReSharper disable once CppInconsistentNaming
+	/**
+	 * \brief Generates a tree for the given NPE and finds the cost
+	 * \param NPE NPE used to create the tree
+	 * \return cost of the tree
+	 */
 	double Cost(const string NPE)
 	{
 		GenerateTree(NPE);
@@ -34,6 +43,10 @@ public:
 	}
 
 	// ReSharper disable once CppInconsistentNaming
+	/**
+	 * \brief Post order traversal of the tree
+	 * \return string holding the NPE
+	 */
 	string GetNPE() const
 	{
 		return tree.ToString();
@@ -42,11 +55,14 @@ public:
 
 private:
 	
-	vector<Node*> items;
-	ifstream in;
+	vector<Node*> items {};
+	ifstream in {};
 	Tree tree {};
 
 
+	/**
+	 * \brief Parses the header for the nodes and their sizes
+	 */
 	void ParseHeader()
 	{
 		string line;
@@ -60,10 +76,14 @@ private:
 		}
 	}
 
+	/**
+	 * \brief Creates a tree from a given NPE
+	 * \param NPE string holding the NPE (12V3H...)
+	 */
 	void GenerateTree(string NPE)
 	{
 		tree.MakeEmpty();
-		Node* temp;
+		Node* temp = nullptr;
 		for(int i = NPE.length()-1; i>=0; i--)
 		{
 			//delete temp;
@@ -72,6 +92,7 @@ private:
 				temp = new Node(value);
 			else
 			{
+				//lookup the block
 				auto it = find_if(items.begin(), items.end(), [&](Node* node)
 				{
 					return node->name == value;

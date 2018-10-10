@@ -148,7 +148,6 @@
     <None Include="FloorPlan-NewLinuxConfiguration.vgdbsettings" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AVLTree.h" />
     <ClInclude Include="FloorPlan.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Tree.h" />

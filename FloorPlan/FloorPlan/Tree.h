@@ -1,6 +1,7 @@
 #pragma once
 #include <sstream>
 #include "Node.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -58,6 +59,10 @@ public:
 		Insert(x, root);
 	}
 
+	/**
+	 * \brief Gets all the dimensions of the head and finds the cost.
+	 * \return The minimum area of the tree
+	 */
 	double GetHeadCost()
 	{
 		// ReSharper disable once CppExpressionWithoutSideEffects
@@ -90,7 +95,12 @@ private:
 	int size;
 
 
-	bool CheckDuplicateDim(vector<Node::Dim>& dims) const
+	/**
+	 * \brief Check to see if there are any redundant dimensions
+	 * \param dims dimension vector to check
+	 * \return true if an item was erased, false if no items found
+	 */
+	static bool CheckDuplicateDim(vector<Node::Dim>& dims)
 	{
 		for (auto val1 : dims)
 		{
@@ -113,6 +123,11 @@ private:
 		return false;
 	}
 
+	/**
+	 * \brief Gets all the possible dimensions of a given Node
+	 * \param t the local "head" of the tree. 
+	 * \return Vector of all possible dimensions of the node.
+	 */
 	vector<Node::Dim> GetNodeDim(AvlNode*&t) const
 	{
 		vector<Node::Dim> retVal;
@@ -199,7 +214,7 @@ private:
 	}
 
 	/**
-	 * \brief Makes a string of the tree inline. Print order is set in a public method
+	 * \brief Makes a string of the tree postorder
 	 * \param t Head of subtree
 	 * \return String that holds the tree
 	 */
