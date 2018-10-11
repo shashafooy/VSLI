@@ -89,7 +89,7 @@ private:
 	int size;
 
 
-	bool CheckDuplicateDim(vector<Node::Dim>& dims) const
+	bool RemoveDuplicateDim(vector<Node::Dim>& dims) const
 	{
 		for (auto val1 : dims)
 		{
@@ -118,6 +118,7 @@ private:
 		Node::Dim dim {};
 		if (t == nullptr)
 		{
+			//shouldn't ever occur, but just in case
 			return retVal;
 		}
 		//leaf
@@ -137,15 +138,17 @@ private:
 		{
 			for (auto &right : rightVal)
 			{
+				//V: max height, add width
+				//H; add height, max width
 				dim.height = (t->element == 'V') ? max(left.height, right.height) : left.height + right.height;
-				dim.width = (t->element == 'H') ? max(left.width, right.width) : left.width + right.width;
+				dim.width = (t->element == 'V') ? left.width + right.width : max(left.width, right.width);
 				retVal.push_back(dim);
 			}
 		}
 
 		//check for redundant dim
 		
-		while(CheckDuplicateDim(retVal)){ }
+		while(RemoveDuplicateDim(retVal)){ }
 
 		t->element.dims = retVal;
 
