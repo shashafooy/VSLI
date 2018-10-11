@@ -1,6 +1,7 @@
 #pragma once
 #include <sstream>
 #include "Node.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -52,17 +53,22 @@ public:
 	/**
 	 *	\brief Insert x into the tree;
 	 */
-	void Insert(const Node & x)
+	void Insert(const Node x)
 	{
 		size++;
 		Insert(x, root);
 	}
 
+	/**
+	 * \brief Gets all the dimensions of the head and finds the cost.
+	 * \return The minimum area of the tree
+	 */
 	double GetHeadCost()
 	{
 		// ReSharper disable once CppExpressionWithoutSideEffects
 		GetNodeDim(root);
 		root->element.area = -1;
+		//find smallest area of all possible dimensions
 		for (auto dim : root->element.dims)
 		{
 			if (root->element.area > dim.width*dim.height || root->element.area == -1)
@@ -89,7 +95,12 @@ private:
 	int size;
 
 
-	bool RemoveDuplicateDim(vector<Node::Dim>& dims) const
+	/**
+	 * \brief Check to see if there are any redundant dimensions
+	 * \param dims dimension vector to check
+	 * \return true if an item was erased, false if no items found
+	 */
+	static bool CheckDuplicateDim(vector<Node::Dim>& dims)
 	{
 		for (auto val1 : dims)
 		{
@@ -112,13 +123,17 @@ private:
 		return false;
 	}
 
+	/**
+	 * \brief Gets all the possible dimensions of a given Node
+	 * \param t the local "head" of the tree. 
+	 * \return Vector of all possible dimensions of the node.
+	 */
 	vector<Node::Dim> GetNodeDim(AvlNode*&t) const
 	{
 		vector<Node::Dim> retVal;
 		Node::Dim dim {};
 		if (t == nullptr)
 		{
-			//shouldn't ever occur, but just in case
 			return retVal;
 		}
 		//leaf
@@ -138,17 +153,15 @@ private:
 		{
 			for (auto &right : rightVal)
 			{
-				//V: max height, add width
-				//H; add height, max width
 				dim.height = (t->element == 'V') ? max(left.height, right.height) : left.height + right.height;
-				dim.width = (t->element == 'V') ? left.width + right.width : max(left.width, right.width);
+				dim.width = (t->element == 'H') ? max(left.width, right.width) : left.width + right.width;
 				retVal.push_back(dim);
 			}
 		}
 
 		//check for redundant dim
 		
-		while(RemoveDuplicateDim(retVal)){ }
+		while(CheckDuplicateDim(retVal)){ }
 
 		t->element.dims = retVal;
 
@@ -165,7 +178,7 @@ private:
 	 * \param  t Current head
 	 * \return True if successfully inserted the Node
 	 */
-	bool Insert(const Node & x, AvlNode * & t) const
+	bool Insert(const Node x, AvlNode * & t) const
 	{
 		//TODO custom insert for NPE
 
@@ -188,19 +201,20 @@ private:
 	 * \brief Deletes the tree
 	 * \param t Head of subtree
 	 */
-	void MakeEmpty(AvlNode * & t) const
+	void MakeEmpty(AvlNode * & t)
 	{
 		if (t != nullptr)
 		{
 			MakeEmpty(t->left);
 			MakeEmpty(t->right);
 			delete t;
+			size--;
 		}
 		t = nullptr;
 	}
 
 	/**
-	 * \brief Makes a string of the tree inline. Print order is set in a public method
+	 * \brief Makes a string of the tree postorder
 	 * \param t Head of subtree
 	 * \return String that holds the tree
 	 */
