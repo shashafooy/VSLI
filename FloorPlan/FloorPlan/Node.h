@@ -2,7 +2,7 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include <math.h>
+#include <cmath>
 
 
 using namespace std;
@@ -40,7 +40,7 @@ struct Node
 
 	void GenerateDims(const double aspectRatio)
 	{
-		Dim newDim {};
+		Dim newDim;  // NOLINT(cppcoreguidelines-pro-type-member-init, hicpp-member-init)
 		newDim.width = sqrt(area / aspectRatio);
 		newDim.height = sqrt(area*aspectRatio);
 		dims.push_back(newDim);

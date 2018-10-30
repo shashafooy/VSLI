@@ -37,13 +37,13 @@ public:
 	 * \brief Finds a more optimal solution based on the simulated annealing algorithm.
 	 * The program will stop when either the temperature is below a set epsilon
 	 *  or the ratio of rejections/moves is greater than the set ratio.
-	 * \param initalSolution Initial NPE to optimize.
+	 * \param initialSolution Initial NPE to optimize.
 	 */
-	void Run(const string initalSolution)
+	void Run(const string& initialSolution)
 	{
-		NPELength = static_cast<int>(initalSolution.length());
-		bestSolution = initalSolution;
-		currSolution = initalSolution;
+		NPELength = static_cast<int>(initialSolution.length());
+		bestSolution = initialSolution;
+		currSolution = initialSolution;
 		if (t0 == -1) InitTemp();
 
 
@@ -52,9 +52,8 @@ public:
 		auto temp = -t0;
 		auto currentCost = Cost(currSolution);
 		auto bestCost = currentCost;
-		string newE;
 
-		printf("Initial Solution\n%s\nCost: %f\n\n", initalSolution.c_str(), currentCost);
+		printf("Initial Solution\n%s\nCost: %f\n\n", initialSolution.c_str(), currentCost);
 
 
 		do
@@ -62,9 +61,9 @@ public:
 			MT = uphill = reject = 0;
 			do
 			{
-				newE = GetMove();
+				const auto newE = GetMove();
 				MT++;
-				auto delCost = Cost(newE) - currentCost;
+				const auto delCost = Cost(newE) - currentCost;
 				//continue if a decrease in cost or if random 0-1 < e^-cost/temp
 				if (delCost < 0 || (rand() % 10000) / 10000.0 < exp(delCost / -temp))
 				{
@@ -96,7 +95,7 @@ public:
 	 * \param NPE NPE used to create the tree
 	 * \return cost of the tree
 	 */
-	double Cost(const string NPE)
+	double Cost(const string& NPE)
 	{
 		GenerateTree(NPE);
 
@@ -160,7 +159,7 @@ private:
 	double probability;
 	double epsilon;
 	// ReSharper disable once CppInconsistentNaming
-	int NPELength;
+	int NPELength {};
 
 	string currSolution;
 	string bestSolution;
@@ -359,7 +358,7 @@ private:
 	}
 
 	/**
-	 * \brief Determinds if the current solution is an Operator
+	 * \brief Determines if the current solution is an Operator
 	 * \param index Char to look at in the current string
 	 * \return True if the character is a V or H
 	 */
