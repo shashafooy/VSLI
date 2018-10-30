@@ -100,7 +100,7 @@ private:
 	 * \param dims dimension vector to check
 	 * \return true if an item was erased, false if no items found
 	 */
-	static bool CheckDuplicateDim(vector<Node::Dim>& dims)
+	static bool RemoveDuplicateDim(vector<Node::Dim>& dims)
 	{
 		for (auto val1 : dims)
 		{
@@ -161,7 +161,7 @@ private:
 
 		//check for redundant dim
 		
-		while(CheckDuplicateDim(retVal)){ }
+		while(RemoveDuplicateDim(retVal)){ }
 
 		t->element.dims = retVal;
 
