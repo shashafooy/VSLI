@@ -243,12 +243,12 @@ private:
 		}
 		const auto firstChar = index;
 		//find adjacent operand
-		do 
+		do
 		{
 			index++;
 			//reached end of NPE, try again
 			if (index == NPELength) return Move1();
-		}while (IsOperator(index));
+		} while (IsOperator(index));
 		auto retVal = currSolution;
 		swap(retVal[index], retVal[firstChar]);
 
@@ -280,11 +280,9 @@ private:
 			{
 				break;
 			}
-		}while (IsOperator(index2));
+		} while (IsOperator(index2));
 		//overstepped by 1
 		index2--;
-		//not a chain
-		//if (index2 == index1) return Move2();
 		auto retVal = currSolution;
 		for (; index1 <= index2; index1++)
 		{
@@ -301,34 +299,56 @@ private:
 	string Move3()
 	{
 		auto index = rand() % (NPELength - 1);
-		//find operand and adjacent operator
-		while (!(IsOperand(index) && IsOperator(index + 1)))
-		{
-			index++;
-			//check end of NPE
-			if (index + 1 == NPELength)
-			{
-				index = rand() % (NPELength - 1);
-			}
-		}
+		auto attempts = NPELength;
 
-		//check balloting property
-		if (index > 0)
+		while (attempts > 0)
 		{
-			//invalid, try another move
-			if (!(currSolution.at(index - 1) != currSolution.at(index + 1) && 2 * GetNumOperators(index + 1) <= index)){ 
-				return GetMove();
+			//find adjacent operand and operator
+			while (IsOperand(index) && IsOperand(index + 1) || IsOperator(index) && IsOperator(index + 1))
+			{
+				index++;
+				index %= NPELength - 1;
 			}
-		}
-		else
-		{
-			//invalid, try another move
-			if (!(2 * GetNumOperators(index + 1) <= index)) {
-				return GetMove();
+
+			//check balloting property
+			if (index > 0)
+			{
+				//invalid, try another move
+				//()?: if item is operand compare neighboring items, 
+				//if operator, check item 2 spaces ahead
+				if (!(currSolution[IsOperand(index)?index - 1:index] != currSolution[IsOperand(index)?index + 1:index+2] && 2 * GetNumOperators(index + 1) <= index))
+				{
+					//try move 3 at next index
+					if (--attempts > 0)
+					{
+						index++;
+						index %= NPELength - 1;
+						continue;
+					}
+					return GetMove();
+				}
 			}
+			else
+			{
+				//invalid, try another move
+				if (!(2 * GetNumOperators(index + 1) <= index))
+				{
+					//try move 3 at next index
+					if (--attempts > 0)
+					{
+						index++;
+						//check end of NPE
+						index %= NPELength - 1;
+						continue;
+					}
+					if (--attempts > 0) continue;
+					return GetMove();
+				}
+			}
+			break;
 		}
 		auto retVal = currSolution;
-		swap(retVal[index],retVal[index+1]);
+		swap(retVal[index], retVal[index + 1]);
 		return retVal;
 	}
 
@@ -354,6 +374,7 @@ private:
 	 */
 	bool IsOperand(const int index)
 	{
+		if (index >= NPELength || index < 0) return false;
 		return currSolution.at(index) != 'V' && currSolution.at(index) != 'H';
 	}
 
@@ -364,6 +385,7 @@ private:
 	 */
 	bool IsOperator(const int index)
 	{
+		if (index >= NPELength || index < 0) return false;
 		return currSolution.at(index) == 'V' || currSolution.at(index) == 'H';
 	}
 
