@@ -53,9 +53,10 @@ public:
 	/**
 	 *	\brief Insert x into the tree;
 	 */
-	void Insert(const Node x)
+	void Insert(const Node& x)
 	{
 		size++;
+		// ReSharper disable once CppExpressionWithoutSideEffects
 		Insert(x, root);
 	}
 
@@ -178,10 +179,8 @@ private:
 	 * \param  t Current head
 	 * \return True if successfully inserted the Node
 	 */
-	bool Insert(const Node x, AvlNode * & t) const
+	bool Insert(const Node& x, AvlNode * & t) const
 	{
-		//TODO custom insert for NPE
-
 		if (t == nullptr)
 		{
 			t = new AvlNode { x, nullptr, nullptr };
@@ -214,7 +213,7 @@ private:
 	}
 
 	/**
-	 * \brief Makes a string of the tree postorder
+	 * \brief Makes a string of the tree post-order
 	 * \param t Head of subtree
 	 * \return String that holds the tree
 	 */
